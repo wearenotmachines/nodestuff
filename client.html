@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Websocket client</title>
+</head>
+<body onload="init();">
+	<form method="post">
+		<input type="text" id="myId" />
+		<button id="open" type="button">Set up</button>
+		<textarea style="display:none" id="client"></textarea>
+		<button style="display:none" id="send" type="button">Send</button>
+	</form>
+	<div id="messages">
+
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+function init() {
+	var addr = "ws://localhost:9000";
+	var textarea = document.getElementById("client");
+	var send = document.getElementById("send");
+	var open = document.getElementById("open");
+	var me = document.getElementById("myId");
+	var socket;
+
+	var id = "";
+
+	var setup = false;
+
+	open.addEventListener("click", function(e) {
+		if (setup) {
+			textarea.style.display = "block";
+			send.style.display = "block";
+		} else {
+			socket.send(JSON.stringify({
+				"action" : "setup",
+				"data" : {
+					"name" : document.getElementById("myId").value
+				}
+			}));
+		}
+	});
+
+	console.log("opening connection");
+	socket = new WebSocket(addr, "echo-protocol");
+
+	socket.addEventListener("message", function(s) {
+		console.log("Server said: "+s.data);
+		var message = JSON.parse(s.data);
+		var action = message.state;
+		console.log("Next: "+action);
+		funcs[action](message);
+	});
+
+	send.addEventListener("click", function(e) {
+		if (!/[A-Za-z0-9]+/.test(textarea.value)) return;
+		console.log("Sending "+textarea.value);
+		socket.send(JSON.stringify({
+				"action" : "talking",
+				"data" : {
+					"message" : textarea.value
+				}
+			}));
+	});
+
+	var funcs = {
+
+		talking: function(payload) {
+			if (!setup) {
+				setup = true;
+				textarea.style.display = "block";
+				send.style.display = "block";
+				open.style.display = "none";
+				me.style.display = "none";
+			}
+			textarea.value = "";
+			document.getElementById("messages").innerHTML += "<p>"+payload.message+"</p>";
+		}
+	};
+
+}
+
+
+</script>

@@ -1,0 +1,56 @@
+html, body {
+		height:100%;
+		min-height:100%;
+		margin:0;
+		font-family:Arial;
+		font-size:1em;
+	}
+	p {
+		padding:4px;
+		margin:4px;
+	}
+	#container {
+		height:100%;
+		width:50%;
+		margin:20px auto;
+	}
+	#chat-container {
+		height:100%;
+	}
+	#conversation {
+		box-sizing:border-box;
+		border:1px dotted #666666;
+		overflow:auto;
+		padding:8px;
+		height:50%;
+		width:100%;
+	}
+	textarea, input {
+		width:100%;
+		margin:8px 0px;
+		padding:8px;
+		border:1px dotted #666666;
+		box-sizing:border-box;
+	}
+	textarea {
+		height:100px;
+	}
+	.connection {
+		padding:0px;
+		box-sizing:border-box;
+		width:100%;
+	}
+	.connection input {
+		width:80%;
+		display:inline;
+		margin-right:4px;
+	}
+	.connection button {
+		width:19%;
+		display:inline;
+		margin:0;
+	}
+	p.new-connection {
+		color:#333333;
+	}
+
